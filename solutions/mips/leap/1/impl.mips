@@ -1,0 +1,32 @@
+## Registers
+
+# | Register | Usage     | Type    | Description                                      |
+# | -------- | --------- | ------- | ------------------------------------------------ |
+# | `$a0`    | input     | integer | year to check                                    |
+# | `$v0`    | output    | boolean | input is leap year (`0` = `false`, `1` = `true`) |
+# | `$t0-9`  | temporary | any     | used for temporary storage                       |
+
+.globl is_leap_year
+
+is_leap_year:
+        li $t0, 4
+        li $t1, 100
+        li $t2, 400
+
+        div $a0, $t0
+        mfhi $t0
+        slti $t0, $t0, 1
+
+        div $a0, $t1
+        mfhi $t1
+        slti $t1, $t1, 1
+        nor $t1, $t1, $t1
+
+        div $a0, $t2
+        mfhi $t2
+        slti $t2, $t2, 1
+
+        and $v0, $t0, $t1
+        or $v0, $v0, $t2
+
+        jr $ra
